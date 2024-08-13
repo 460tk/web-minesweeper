@@ -8,9 +8,9 @@ game_box = document.getElementById("game_box");
 
 class mine_sweeper {
     constructor(width, hight, mine) {
-        this.game_width = width
-        this.game_hight = hight
-        this.mine = mine
+        this.game_width = width;
+        this.game_hight = hight;
+        this.mine = mine;
     }
 
     create_map() {
@@ -33,7 +33,7 @@ class mine_sweeper {
     }
 
     box_open(event) {
-        let elem = event.currentTarget
+        let elem = event.currentTarget;
         elem.classList.remove("bg-black");
         elem.classList.add("bg-gray-400");
     }
@@ -54,7 +54,7 @@ class mine_sweeper {
             for (let j = 0; j < this.game_width; j++) {
                 const horizon_box = document.createElement("div");
                 horizon_box.classList.add("w-8", "h-8", "bg-green-200", "m-1", "text-center");
-                horizon_box.textContent = this.mine_map[i][j]
+                horizon_box.textContent = this.mine_map[i][j];
                 horizon_box.addEventListener("click", {obj: this, handleEvent: this.box_open});
                 horizon_box.addEventListener("contextmenu",{obj: this, handleEvent: this.flag});
                 vertical_box.appendChild(horizon_box);
