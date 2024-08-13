@@ -29,23 +29,17 @@ class mine_sweeper {
                 this.mine_map[vertical][horizon] = -1;
                 placed_mine++;
             }
-        console.log(this.mine_map);
         }
     }
 
     box_open(event) {
         let elem = event.currentTarget
-        console.log(elem)
-        console.log(this.obj)
         elem.classList.remove("bg-black");
         elem.classList.add("bg-gray-400");
     }
     
     flag(event) {
         let elem = event.currentTarget;
-        console.log(elem)
-        console.log(event)
-        console.log(this.handleEvent)
         elem.classList.remove("bg-black");
         elem.classList.add("bg-red-400");
     }
