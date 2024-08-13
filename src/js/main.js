@@ -9,6 +9,7 @@ class mine_sweeper {
     }
 
     create_map(width, hight, mine) {
+        let mine_map
         let width_map = Array(width);
         width_map.fill(0);
         mine_map = Array(hight);
