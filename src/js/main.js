@@ -1,4 +1,4 @@
-difficulty_arry = {easy:[9,9,10], nomal:[16,16,40], hard:[30,16,99]}
+difficulty_arry = {easy:[9,9,10], nomal:[16,16,40], hard:[30,16,99]};
 
 function get_random_int(max) {
     return Math.floor(Math.random() * max);
@@ -46,7 +46,7 @@ class mine_sweeper {
     set_mine_map(no_mine) {
         let placed_mine = 0;
         while (placed_mine < this.mine) {
-            let random_coordinate = []
+            let random_coordinate = [];
             random_coordinate[0] = get_random_int(this.game_hight);
             random_coordinate[1] = get_random_int(this.game_width);
             if (this.mine_map[random_coordinate[0]][random_coordinate[1]] === 0
@@ -131,6 +131,6 @@ class mine_sweeper {
 for (let i = 0; i < selecter.length; i++) {
     selecter[i].addEventListener("click", function(){
         const game_instance = new mine_sweeper(difficulty_arry[this.id]);
-        game_instance.render_game_start(game_instance)
+        game_instance.render_game_start(game_instance);
     });
 }
