@@ -74,7 +74,7 @@ class mine_sweeper {
             this.html_render_list.push(horizon_html_render_list);
         }
     }
-    test_render(){
+    html_render(){
         for (let i = 0; i < this.html_render_list.length; i++) {
             for (let j = 0; j < this.html_render_list[i].length; j++) {
                 this.html_render_list[i][j].textContent = this.mine_map[i][j];
@@ -87,17 +87,20 @@ class mine_sweeper {
             this.set_mine_map(coordinate);
             this.first = false;
         }
-        this.test_render();
-        this.render_map[coordinate[0]][coordinate[1]] = -1
+        this.render_map[coordinate[0]][coordinate[1]] = -1;
         if ((this.mine_map[coordinate[0]][coordinate[1]]) === -1) {
-            console.log("Bomb!")
+            console.log("Bomb!");
         }
+        this.html_render();
         this.html_render_list[coordinate[0]][coordinate[1]].classList.remove("bg-green-200");
         this.html_render_list[coordinate[0]][coordinate[1]].classList.add("bg-gray-400");
     }
     render_flag(elem) {
-        elem.classList.remove("bg-green-200");
-        elem.classList.add("bg-red-400");
+        let coordinate = elem.id.split(",").map(Number);
+        this.render_map[coordinate[0]][coordinate[1]] = 1;
+        this.html_render();
+        this.html_render_list[coordinate[0]][coordinate[1]].classList.remove("bg-green-200");
+        this.html_render_list[coordinate[0]][coordinate[1]].classList.add("bg-red-400");
     }    
 }
 for (let i = 0; i < selecter.length; i++) {
