@@ -44,7 +44,6 @@ class mine_sweeper {
         }
     }
     box_open(map, map2, vertical, horizon, obj){
-        console.log(vertical, horizon);
         if (map[vertical][horizon] === 0 && map2[vertical][horizon] !== -1){
             map2[vertical][horizon] = -1;
             obj.map_search(obj.box_open, map, map2, [vertical, horizon]);
@@ -115,6 +114,10 @@ class mine_sweeper {
                     this.html_render_list[i][j].classList.remove("bg-green-200");
                     this.html_render_list[i][j].classList.add("bg-gray-400");
                 }
+                else if(this.render_map[i][j] === 1) {
+                    this.html_render_list[i][j].classList.remove("bg-green-200");
+                    this.html_render_list[i][j].classList.add("bg-red-400");
+                }
             }
         }
     }
@@ -137,8 +140,6 @@ class mine_sweeper {
         let coordinate = elem.id.split(",").map(Number);
         this.render_map[coordinate[0]][coordinate[1]] = 1;
         this.html_render();
-        this.html_render_list[coordinate[0]][coordinate[1]].classList.remove("bg-green-200");
-        this.html_render_list[coordinate[0]][coordinate[1]].classList.add("bg-red-400");
     }    
 }
 for (let i = 0; i < selecter.length; i++) {
