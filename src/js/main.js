@@ -27,21 +27,29 @@ class mine_sweeper {
         this.mine_map = two_dimension(this.game_hight, this.game_width);
         this.render_map = two_dimension(this.game_hight, this.game_width);
     }
-    map_search(func, map, coordinate){
+    map_search(func, map, map2, coordinate){
         for (let i = coordinate[0]-1; i < coordinate[0]+2; i++) {
             if (0 <= i && i < this.game_hight) {
                 for (let j = coordinate[1]-1; j < coordinate[1]+2; j++) {
                     if (0 <= j && this.game_width) {
-                        func(map, i, j);
+                        func(map, map2, i, j, this);
                     }
                 }
             }
         }
     }
-    mine_total(map, vertical, horizon){
+    mine_total(map, map2, vertical, horizon){
         if (map[vertical][horizon] !== -1){
             map[vertical][horizon]++;
         }
+    }
+    box_open(map, map2, vertical, horizon, obj){
+        console.log(vertical, horizon);
+        if (map[vertical][horizon] === 0 && map2[vertical][horizon] !== -1){
+            map2[vertical][horizon] = -1;
+            obj.map_search(obj.box_open, map, map2, [vertical, horizon]);
+        }
+        map2[vertical][horizon] = -1;
     }
     set_mine_map(no_mine) {
         let placed_mine = 0;
@@ -61,7 +69,7 @@ class mine_sweeper {
         for (let i = 0; i < this.game_hight; i++) {
             for (let j = 0; j < this.game_width; j++) {
                 if (this.mine_map[i][j] === -1) {
-                    this.map_search(this.mine_total, this.mine_map, [i, j]);
+                    this.map_search(this.mine_total, this.mine_map, 0, [i, j]);
                 }
             }   
         }
@@ -103,6 +111,10 @@ class mine_sweeper {
         for (let i = 0; i < this.html_render_list.length; i++) {
             for (let j = 0; j < this.html_render_list[i].length; j++) {
                 this.html_render_list[i][j].textContent = this.mine_map[i][j];
+                if (this.render_map[i][j] === -1) {
+                    this.html_render_list[i][j].classList.remove("bg-green-200");
+                    this.html_render_list[i][j].classList.add("bg-gray-400");
+                }
             }
         }
     }
@@ -113,12 +125,13 @@ class mine_sweeper {
             this.first = false;
         }
         this.render_map[coordinate[0]][coordinate[1]] = -1;
-        if ((this.mine_map[coordinate[0]][coordinate[1]]) === -1) {
+        if (this.mine_map[coordinate[0]][coordinate[1]] === 0){
+            this.map_search(this.box_open, this.mine_map, this.render_map, coordinate);
+        }
+        else if ((this.mine_map[coordinate[0]][coordinate[1]]) === -1) {
             console.log("Bomb!");
         }
         this.html_render();
-        this.html_render_list[coordinate[0]][coordinate[1]].classList.remove("bg-green-200");
-        this.html_render_list[coordinate[0]][coordinate[1]].classList.add("bg-gray-400");
     }
     render_flag(elem) {
         let coordinate = elem.id.split(",").map(Number);
