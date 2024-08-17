@@ -4,6 +4,17 @@ function get_random_int(max) {
     return Math.floor(Math.random() * max);
 }
 
+function two_dimension (max, min){
+    let array = [] 
+    for (let i = 0; i < max; i++) {
+        array[i] = [];
+        for (let j = 0; j < min; j++) {
+            array[i][j] = 0;
+        }
+    }
+    return array;
+}
+
 const game_box = document.getElementById("game_box");
 const selecter = document.getElementsByClassName("difficulty");
 
@@ -13,20 +24,23 @@ class mine_sweeper {
         this.game_hight = data_list[1];
         this.mine = data_list[2];
         this.first = true;
-        this.mine_map = [];
-        for (let i = 0; i < this.game_hight; i++) {
-            this.mine_map[i] = [];
-            for (let j = 0; j < this.game_width; j++) {
-                this.mine_map[i][j] = 0;
+        this.mine_map = two_dimension(this.game_hight, this.game_width);
+        this.render_map = two_dimension(this.game_hight, this.game_width);
+    }
+    map_search(func, map, coordinate){
+        for (let i = coordinate[0]-1; i < coordinate[0]+2; i++) {
+            if (0 <= i && i < this.game_hight) {
+                for (let j = coordinate[1]-1; j < coordinate[1]+2; j++) {
+                    if (0 <= j && this.game_width) {
+                        func(map, i, j);
+                    }
+                }
             }
         }
-
-        this.render_map = [];
-        for (let i = 0; i < this.game_hight; i++) {
-            this.render_map[i] = [];
-            for (let j = 0; j < this.game_width; j++) {
-                this.render_map[i][j] = 0;
-            }
+    }
+    mine_total(map, vertical, horizon){
+        if (map[vertical][horizon] !== -1){
+            map[vertical][horizon]++;
         }
     }
     set_mine_map(no_mine) {
@@ -43,6 +57,13 @@ class mine_sweeper {
                 this.mine_map[random_coordinate[0]][random_coordinate[1]] = -1;
                 placed_mine++;
             }
+        }
+        for (let i = 0; i < this.game_hight; i++) {
+            for (let j = 0; j < this.game_width; j++) {
+                if (this.mine_map[i][j] === -1) {
+                    this.map_search(this.mine_total, this.mine_map, [i, j]);
+                }
+            }   
         }
     }
     open_render_map(horizon, vertical) {
