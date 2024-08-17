@@ -35,7 +35,11 @@ class mine_sweeper {
             let random_coordinate = []
             random_coordinate[0] = get_random_int(this.game_hight);
             random_coordinate[1] = get_random_int(this.game_width);
-            if (this.mine_map[random_coordinate[0]][random_coordinate[1]] === 0 && JSON.stringify(random_coordinate) !== JSON.stringify(no_mine)) {
+            if (this.mine_map[random_coordinate[0]][random_coordinate[1]] === 0
+            && !(random_coordinate[0] <= no_mine[0]+1
+            && random_coordinate[1] <= no_mine[1]+1
+            && no_mine[0]-1 <= random_coordinate[0]
+            && no_mine[1]-1 <= random_coordinate[1])){
                 this.mine_map[random_coordinate[0]][random_coordinate[1]] = -1;
                 placed_mine++;
             }
