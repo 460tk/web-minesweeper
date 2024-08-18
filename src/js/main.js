@@ -20,8 +20,10 @@ const selecter = document.getElementsByClassName("difficulty");
 
 class mine_sweeper {
     constructor(data_list) {
+        this.open_count = 0;
         this.game_width = data_list[0];
         this.game_hight = data_list[1];
+        // this.no_mine_box = data_list[0] * data_list[1] - data_list[2];
         this.mine = data_list[2];
         this.first = true;
         this.mine_map = two_dimension(this.game_hight, this.game_width);
@@ -92,7 +94,6 @@ class mine_sweeper {
                 const horizon_box = document.createElement("div");
                 horizon_box.id = `${i},${j}`;
                 horizon_box.classList.add("w-8", "h-8", "bg-green-200", "m-1", "text-center");
-                horizon_box.textContent = this.render_map[i][j];
                 horizon_box.addEventListener("click", function() {
                     game.render_box_open(this);
                 });
@@ -109,37 +110,63 @@ class mine_sweeper {
     html_render(){
         for (let i = 0; i < this.html_render_list.length; i++) {
             for (let j = 0; j < this.html_render_list[i].length; j++) {
-                this.html_render_list[i][j].textContent = this.mine_map[i][j];
                 if (this.render_map[i][j] === -1) {
-                    this.html_render_list[i][j].classList.remove("bg-green-200");
-                    this.html_render_list[i][j].classList.add("bg-gray-400");
+                    this.html_render_list[i][j].textContent = this.mine_map[i][j];
+                }
+                if (this.render_map[i][j] === -1) {
+                    if (this.mine_map[i][j] === -1){
+                        this.html_render_list[i][j].classList.remove("bg-green-200");
+                        this.html_render_list[i][j].classList.add("bg-yellow-300");
+                    }
+                    else {
+                        this.html_render_list[i][j].classList.remove("bg-green-200");
+                        this.html_render_list[i][j].classList.add("bg-gray-400");
+                    }
                 }
                 else if(this.render_map[i][j] === 1) {
                     this.html_render_list[i][j].classList.remove("bg-green-200");
                     this.html_render_list[i][j].classList.add("bg-red-400");
+                }
+                else if(this.render_map[i][j] === 0){
+                    this.html_render_list[i][j].classList.remove("bg-red-400");
+                    this.html_render_list[i][j].classList.remove("bg-gray-400");
+                    this.html_render_list[i][j].classList.add("bg-green-200");
                 }
             }
         }
     }
     render_box_open(elem) {
         let coordinate = elem.id.split(",").map(Number);
+        console.log(this.open_count);
         if (this.first) {
             this.set_mine_map(coordinate);
             this.first = false;
         }
-        this.render_map[coordinate[0]][coordinate[1]] = -1;
-        if (this.mine_map[coordinate[0]][coordinate[1]] === 0){
-            this.map_search(this.box_open, this.mine_map, this.render_map, coordinate);
+        if (this.open_count !== -1){
+            if (this.render_map[coordinate[0]][coordinate[1]] === 0){
+                this.render_map[coordinate[0]][coordinate[1]] = -1;
+                if (this.mine_map[coordinate[0]][coordinate[1]] === 0){
+                    this.map_search(this.box_open, this.mine_map, this.render_map, coordinate);
+                }
+                else if ((this.mine_map[coordinate[0]][coordinate[1]]) === -1) {
+                    alert("Bomb!");
+                    this.open_count = -1;
+                }
+                this.html_render();
+            }
         }
-        else if ((this.mine_map[coordinate[0]][coordinate[1]]) === -1) {
-            console.log("Bomb!");
-        }
-        this.html_render();
     }
     render_flag(elem) {
         let coordinate = elem.id.split(",").map(Number);
-        this.render_map[coordinate[0]][coordinate[1]] = 1;
+        if (this.open_count !== -1){
+            if (this.render_map[coordinate[0]][coordinate[1]] === 0) {
+                this.render_map[coordinate[0]][coordinate[1]] = 1;
+            }
+            else if (this.render_map[coordinate[0]][coordinate[1]] === 1){
+                this.render_map[coordinate[0]][coordinate[1]] = 0;
+            }
         this.html_render();
+        }
     }    
 }
 for (let i = 0; i < selecter.length; i++) {
