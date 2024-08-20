@@ -1,1 +1,1 @@
-# web-mineswieeper
+# web-minesweeper
