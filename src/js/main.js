@@ -119,6 +119,7 @@ class mine_sweeper {
                         this.html_render_list[i][j].classList.add("bg-yellow-300");
                     }
                     else {
+                        this.html_render_list[i][j].classList.remove("bg-red-400");
                         this.html_render_list[i][j].classList.remove("bg-green-200");
                         this.html_render_list[i][j].classList.add("bg-gray-400");
                     }
